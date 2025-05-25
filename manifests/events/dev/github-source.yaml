@@ -1,0 +1,30 @@
+# Info on GitHub Webhook: https://developer.github.com/v3/repos/hooks/#create-a-hook
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: github
+  namespace: argo-events
+spec:
+  service:
+    ports:
+      - name: webhook
+        port: 12000
+        targetPort: 12000
+  github:
+    example:
+      repositories:
+        # https://github.com/by-nelson/argo-ecosystem
+        - owner: by-nelson
+          names:
+            - argo-ecosystem
+      webhook:
+        endpoint: /push
+        port: "12000"
+        method: POST
+        url: http://url-that-is-reachable-from-GitHub
+      events:
+        - "push"
+        - "pull_request"
+      insecure: true
+      active: true
+      contentType: "json"

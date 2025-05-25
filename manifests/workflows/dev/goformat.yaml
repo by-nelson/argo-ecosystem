@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: golang-format
+  namespace: argo
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+      # set 'fix' to true so that this step formats the code
+      - name: fix
+        value: false
+  templates:
+    - name: main
+      steps:
+        - name: run-format-pre
+          template: format-check
+    - name: format-check
+      container:
+        image: docker.io/library/golang:1.24.3
+        command: [make, format-pre]
