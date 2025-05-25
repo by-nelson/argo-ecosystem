@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: hello-world
+  namespace: argo-events
+spec:
+  entrypoint: hello
+  templates:
+    - name: hello
+      container:
+        image: busybox
+        command: [echo, "Hello World!"]
