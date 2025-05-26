@@ -1,9 +1,11 @@
 # Argo Ecosystem
-This project leverages the Argo Ecosystem to setup a DevOps platform ready for CI/CD, progressive rollouts, events and specialized workloads. It serves as a template for projects that want to modernize their ways of doing development and deployment without expending lots of money on tools.
+This project leverages the Argo Ecosystem to setup a DevOps platform ready for CI/CD, progressive rollouts, specialized workloads, events and notifications. It serves as a template for projects that want to modernize their ways of doing development and deployment without expending lots of money on tools.
 
 ## Requirements
 
 - Kubernetes cluster up and running (for local development: [minikube](https://minikube.sigs.k8s.io/docs/start), [kind](https://kind.sigs.k8s.io/), etc.)
+- kubectl
+- helm
 
 ### Optional
 - [Argo CLI](https://github.com/argoproj/argo-workflows/releases/)

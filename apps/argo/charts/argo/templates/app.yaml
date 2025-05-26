@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: apps
+  namespace: {{ .Release.Namespace }}
+  labels:
+    helm.release: {{ .Release.Name }}
+spec:
+  destination:
+    namespace: {{ .Release.Namespace }}
+    server: {{ .Values.server }}
+  project: default
+  source:
+    path: {{ .Values.source.path }}
+    repoURL: {{ .Values.source.repo }}
+    targetRevision: {{ .Values.source.revision }}
