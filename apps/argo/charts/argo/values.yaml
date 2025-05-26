@@ -1,7 +1,0 @@
-# Destination server in which to create the root App
-server: ""
-# Argo App source config
-source:
-  path: ""
-  repo: ""
-  revision: "HEAD"
