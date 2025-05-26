@@ -1,0 +1,20 @@
+argocd-apps:
+  applications:
+    argocd:
+      namespace: argocd
+      project: default
+      additionalAnnotations: {}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      sources:
+        - chart: argo 
+          repoURL: registry-1.docker.io/nelsonalvarez
+          targetRevision: 0.1.1
+          helm:
+            valueFiles:
+            - $values/manifests/argocd/dev/values.yaml
+        - repoURL: https://github.com/by-nelson/argo-ecosystem.git
+          targetRevision: main
+          path: manifests/argocd/dev
+          ref: values
