@@ -33,16 +33,16 @@ argocd-apps:
             - path: manifests/apps/*
       template:
         metadata:
-          name: "apps-{{ .path.basename }}"
+          name: "apps-{{.path.basename}}"
         spec:
           project: default
           sources:
             - repoURL: https://github.com/by-nelson/argo-ecosystem.git 
               targetRevision: main
-              path: "{{ .path.path }}"
+              path: "{{.path.path}}"
           destination:
             server: "https://kubernetes.default.svc"
-            namespace: "{{ .path.basename }}"
+            namespace: "{{.path.basename}}"
           syncPolicy:
             syncOptions:
               - CreateNamespace=true
