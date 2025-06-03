@@ -25,6 +25,7 @@ argocd-apps:
       project: default
       finalizers:
         - resources-finalizer.argocd.argoproj.io
+      goTemplate: true
       generators:
         - git:
             repoURL: https://github.com/by-nelson/argo-ecosystem.git
