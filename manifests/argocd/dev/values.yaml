@@ -3,7 +3,8 @@ argocd-apps:
     argocd:
       namespace: argocd
       project: default
-      additionalAnnotations: {}
+      additionalAnnotations:
+        argocd.argoproj.io/manifest-generate-paths: .
       destination:
         server: https://kubernetes.default.svc
         namespace: argocd
@@ -18,3 +19,30 @@ argocd-apps:
           targetRevision: main
           path: manifests/argocd/dev
           ref: values
+  applicationsets:
+    apps:
+      namespace: argocd
+      project: default
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+      generators:
+        - git:
+            repoURL: https://github.com/by-nelson/argo-ecosystem.git
+            revision: main
+            directories: 
+            - path: manifests/apps/*
+      template:
+        metadata:
+          name: "apps-{{ .path.basename }}"
+        spec:
+          project: default
+          sources:
+            - repoURL: https://github.com/by-nelson/argo-ecosystem.git 
+              targetRevision: main
+              path: "{{ .path.path }}"
+          destination:
+            server: "https://kubernetes.default.svc"
+            namespace: "{{ .path.basename }}"
+          syncPolicy:
+            syncOptions:
+              - CreateNamespace=true

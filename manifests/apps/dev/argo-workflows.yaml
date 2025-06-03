@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argoworkflows
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  sources:
+    - chart: argo-workflows
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 0.45.15
+    - repoURL: https://github.com/by-nelson/argo-ecosystem.git
+      targetRevision: main
+      path: manifests/workflows/dev
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
