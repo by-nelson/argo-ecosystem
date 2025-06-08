@@ -25,7 +25,7 @@ spec:
 
       - name: refresh-token
         script:
-          image: vault:1.17
+          image: hashicorp/vault:1.19
           command: [sh]
           source: |
             set -e
