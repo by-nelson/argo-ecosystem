@@ -14,14 +14,14 @@ spec:
     templates:
       - name: main
         steps:
-          - name: fetch-token
-            template: refresh-token
-          - name: create-k8s-secret
-            template: create-secret
-            arguments:
-              parameters:
-                - name: github-token
-                  value: "{{ steps.fetch-token.outputs.parameters.github-token }}"
+          - - name: fetch-token
+              template: refresh-token
+          - - name: create-k8s-secret
+              template: create-secret
+              arguments:
+                parameters:
+                  - name: github-token
+                    value: "{{ steps.fetch-token.outputs.parameters.github-token }}"
 
       - name: refresh-token
         script:
