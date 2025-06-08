@@ -49,7 +49,7 @@ spec:
             export VAULT_TOKEN
 
 
-            TOKEN_RESPONSE=$(vault write -format=json github/token installation_id="{{ input.parameters.installation-id }}")
+            TOKEN_RESPONSE=$(vault write -format=json github/token installation_id="{{ inputs.parameters.installation-id }}")
             token=$(echo "$TOKEN_RESPONSE" | jq -r '.data.token')
 
             echo $token > /tmp/token
