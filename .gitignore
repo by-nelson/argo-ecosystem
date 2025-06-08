@@ -1,1 +1,6 @@
 dist/
+vault/plugins/*
+!vault/plugins/.gitkeep
+*.tfvars
+.terraform
+*.tfstate*
