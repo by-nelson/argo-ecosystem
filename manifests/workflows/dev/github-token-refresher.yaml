@@ -28,7 +28,7 @@ spec:
                     value: "{{ steps.fetch-token.outputs.parameters.github-token }}"
 
       - name: refresh-token
-        input:
+        inputs:
           parameters:
             - name: installation-id
         script:
