@@ -8,6 +8,15 @@ variable "vault_token" {
   default = "root"
 }
 
+variable "k8s_address" {
+  type = string
+  default = "https://127.0.0.1:45535"
+}
+
+variable "k8s_ca_cert_base64" {
+  type = string
+}
+
 variable "github_plugin_sha" {
   type = string
   default = "46056e4ce06961e4c87d30da0ed18422e69b680755f330cd2a78eac1749192b7"

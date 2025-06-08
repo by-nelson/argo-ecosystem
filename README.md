@@ -58,3 +58,29 @@ export VAULT_ADDR='http://127.0.0.1:8200'
 vault login root
 vault read /github/token installation_id=70166212
 ```
+
+### Testing the Vault integration setup
+
+After Vault is setup and Kubernetes service account and [cluster role binding](https://developer.hashicorp.com/vault/docs/auth/kubernetes#configuring-kubernetes) are created we can test first with a curl pod:
+
+```sh
+kubectl run test --namespace argo --restart=Never -ti --rm --image=curlimages/curl --overrides='{ "apiVersion": "v1", "spec": { "serviceAccountName": "vault-updater-sa", "automountServiceAccountToken": true } }' --command -- /bin/sh
+
+# inside the pod run:
+cat > payload.json <<EOF
+{
+  "role": "github_token_refresher",
+  "jwt": "$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+}
+EOF
+
+curl \
+  --request POST \
+  --data @payload.json \
+  http://vault:8222/v1/auth/kubernetes/login
+
+# a token should be returned here in data.auth.client_token. This token can now in turn be used to get a GitHub token
+```
+
+> [!IMPORTANT]
+> What we just did: we're authenticating to Vault using the Service Account configured, which returned a token as response in data.auth.client_token, this token is now what we can use to generate a GitHub token when calling vault with the header `X-Vault-Token: <returned-token>`

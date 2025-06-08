@@ -30,7 +30,7 @@ resource "vault_mount" "github" {
 }
 
 resource "vault_generic_secret" "github_config" {
-  path = "github/config"
+  path = "${vault_mount.github.path}/config"
  
   data_json = jsonencode({
     app_id = var.github_app_id
@@ -40,4 +40,15 @@ resource "vault_generic_secret" "github_config" {
   depends_on = [
     resource.vault_mount.github
   ]
+}
+
+# Kubernetes auth
+resource "vault_auth_backend" "kubernetes" {
+  type = "kubernetes"
+}
+
+resource "vault_kubernetes_auth_backend_config" "kubernetes_config" {
+  backend = vault_auth_backend.kubernetes.path  
+  kubernetes_host = var.k8s_address
+  kubernetes_ca_cert = base64decode(var.k8s_ca_cert_base64)
 }
