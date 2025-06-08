@@ -56,7 +56,7 @@ To test that everything is working install your application to a repository or o
 ```sh
 export VAULT_ADDR='http://127.0.0.1:8200'
 vault login root
-vault read /github/token installation_id=70166212
+vault write github/token installation_id=70166212
 ```
 
 ### Testing the Vault integration setup

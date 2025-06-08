@@ -16,6 +16,10 @@ spec:
         steps:
           - - name: fetch-token
               template: refresh-token
+              arguments:
+                parameters:
+                  - name: installation-id
+                    value: "70166212"
           - - name: create-k8s-secret
               template: create-secret
               arguments:
@@ -24,14 +28,29 @@ spec:
                     value: "{{ steps.fetch-token.outputs.parameters.github-token }}"
 
       - name: refresh-token
+        input:
+          parameters:
+            - name: installation-id
         script:
           image: hashicorp/vault:1.19
           command: [sh]
           source: |
             set -e
+
+            wget https://github.com/jqlang/jq/releases/download/jq-1.8.0/jq-linux-amd64
+            mv jq-linux-amd64 /bin/jq 
+            chmod +x /bin/jq
+
             export VAULT_ADDR=http://vault:8222
-            vault login -method=kubernetes role=github_token_refresher
-            token=$(vault read -field=token github/token)
+            TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+
+            LOGIN_RESPONSE=$(vault write -format=json auth/kubernetes/login role=github_token_refresher jwt="$TOKEN")
+            VAULT_TOKEN=$(echo "$LOGIN_RESPONSE" | jq -r '.auth.client_token')
+            export VAULT_TOKEN
+
+
+            TOKEN_RESPONSE=$(vault write -format=json github/token installation_id={{ input.parameters.installation-id }})
+            token=$(echo "$TOKEN_RESPONSE" | jq -r '.data.token')
 
             echo $token > /tmp/token
         outputs:

@@ -3,7 +3,7 @@ resource "vault_policy" "create_github_token" {
 
   policy = <<EOF
 path "github/token" {
-  capabilities = ["update"]
+  capabilities = ["update", "read", "create"]
 }
 EOF
 
