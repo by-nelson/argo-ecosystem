@@ -30,7 +30,7 @@ spec:
           source: |
             set -e
             export VAULT_ADDR=http://vault:8222
-            vault login -method=k8s role=github-token-role
+            vault login -method=kubernetes role=github_token_refresher
             token=$(vault read -field=token github/token)
 
             echo $token > /tmp/token
