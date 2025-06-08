@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: refresh-github-token
+  namespace: argo
+spec:
+  schedules:
+    - "*/30 * * * *"
+  concurrencyPolicy: "Replace"
+  startingDeadlineSeconds: 60
+  workflowSpec:
+    serviceAccountName: vault-updater-sa
+    entrypoint: main
+    templates:
+      - name: main
+        steps:
+          - name: fetch-token
+            template: refresh-token
+          - name: create-k8s-secret
+            template: create-secret
+            arguments:
+              parameters:
+                - name: github-token
+                  value: "{{ steps.fetch-token.outputs.parameters.github-token }}"
+
+      - name: refresh-token
+        script:
+          image: vault:1.17
+          command: [sh]
+          source: |
+            set -e
+            export VAULT_ADDR=http://vault:8222
+            vault login -method=k8s role=github-token-role
+            token=$(vault read -field=token github/token)
+
+            echo $token > /tmp/token
+        outputs:
+          parameters:
+            - name: github-token
+              valueFrom:
+                path: /tmp/token
+
+      - name: create-secret
+        inputs:
+          parameters:
+            - name: github-token
+        resource:
+          action: apply
+          manifest: |
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: github-token
+              namespace: argocd
+            stringData:
+              token: "{{ inputs.parameters.github-token }}"
