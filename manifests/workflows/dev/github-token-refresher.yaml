@@ -26,6 +26,8 @@ spec:
                 parameters:
                   - name: github-token
                     value: "{{ steps.fetch-token.outputs.parameters.github-token }}"
+                  - name: github-repo
+                    value: "https://github.com/by-nelson/argo-ecosystem"
 
       - name: refresh-token
         inputs:
@@ -63,6 +65,7 @@ spec:
         inputs:
           parameters:
             - name: github-token
+            - name: github-repo
         resource:
           action: apply
           manifest: |
@@ -71,5 +74,10 @@ spec:
             metadata:
               name: github-token
               namespace: argocd
+              labels:
+                argocd.argoproj.io/secret-type: repo-creds
             stringData:
-              token: "{{ inputs.parameters.github-token }}"
+              type: git
+              url: "{{ inputs.parameters.github-repo }}"
+              username: any
+              password: "{{ inputs.parameters.github-token }}"
