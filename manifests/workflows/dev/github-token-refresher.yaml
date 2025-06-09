@@ -75,7 +75,7 @@ spec:
               name: github-token
               namespace: argocd
               labels:
-                argocd.argoproj.io/secret-type: repo-creds
+                argocd.argoproj.io/secret-type: repository
             stringData:
               type: git
               url: "{{ inputs.parameters.github-repo }}"
