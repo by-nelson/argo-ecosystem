@@ -17,7 +17,7 @@ spec:
       repoURL: https://argoproj.github.io/argo-helm
       targetRevision: 0.45.15
       helm:
-        valuesFiles:
+        valueFiles:
           - $values/manifests/workflows/dev/values.yaml
     - repoURL: https://github.com/by-nelson/argo-ecosystem.git
       targetRevision: main
