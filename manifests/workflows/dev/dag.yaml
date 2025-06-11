@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: dag-demo-template
+spec:
+  entrypoint: main
+  templates:
+    - name: main 
+      dag:
+        tasks:
+          - name: demo
+            template: echo 
+            arguments:
+              parameters:
+                - name: message
+                  value: "Hello World"
+    - name: echo
+      inputs:
+        parameters:
+          - name: message
+      container: 
+        image: busybox
+        command: ["echo"]
+        args:
+          - "{{ inputs.parameters.message }}"
