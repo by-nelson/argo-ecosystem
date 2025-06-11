@@ -16,9 +16,14 @@ spec:
     - chart: argo-workflows
       repoURL: https://argoproj.github.io/argo-helm
       targetRevision: 0.45.15
+      helm:
+        valuesFiles:
+          - $values/manifests/workflows/dev/values.yaml
     - repoURL: https://github.com/by-nelson/argo-ecosystem.git
       targetRevision: main
       path: manifests/workflows/dev
+      ref: values
+      
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
