@@ -13,8 +13,8 @@ spec:
   templates:
     - name: main
       steps:
-        - name: run-format-pre
-          template: format-check
+        - - name: run-format-pre
+            template: format-check
     - name: format-check
       container:
         image: docker.io/library/golang:1.24.3
