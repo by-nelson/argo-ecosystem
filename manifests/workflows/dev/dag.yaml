@@ -30,7 +30,7 @@ spec:
             arguments:
               parameters:
                 - name: message
-                  value: "{{tasks.star.outputs.result}}"
+                  value: "{{=jsonpath toJson(tasks.star.outputs.result) '$.name'}}"
             depends: "star.Succeeded && (guesser.Succeeded && guesser-triple.Failed)"
     - name: echo
       inputs:
@@ -76,9 +76,9 @@ spec:
     - name: starwars
       http:
         timeoutSeconds: 60
-        url: "https://swapi.info/api/people"
+        url: "https://swapi.info/api/people/1"
         method: "GET"
         headers:
           - name: "Content-Type"
             value: "json"
-        successCondition: "response.body contains \"name\""
+        successCondition: "response.body contains \"Luke\""
