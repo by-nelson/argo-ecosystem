@@ -38,11 +38,11 @@ spec:
       script:
         image: python:alpine3.6
         source: |
-          import sys
+          import os
           import random
 
-          x = int(sys.argv[1])
-          n = int(sys.argv[2])
+          x = int(os.environ["X"])
+          n = int(os.environ["N"])
 
           random_value = random.randint(1, n)
           print(f"Generated random value: {random_value}")
@@ -52,10 +52,11 @@ spec:
           else:
               print("Failure: The random value does not equal X.")
         command: [python]
-        args:
-          - "{{ inputs.parameters.goal }}"
-          - "{{ inputs.parameters.range }}"
-
+        env:
+          - name: X
+            value: "{{ inputs.parameters.goal }}"
+          - name: N
+            value: "{{ inputs.parameters.range }}"
     - name: starwars
       http:
         timeoutSeconds: 20

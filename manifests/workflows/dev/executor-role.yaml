@@ -26,3 +26,11 @@ subjects:
   - kind: ServiceAccount
     name: default
     namespace: argo
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    kubernetes.io/service-account.name: default
+  name: default.service-account-token
+type: kubernetes.io/service-account-token
