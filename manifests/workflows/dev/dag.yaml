@@ -8,12 +8,17 @@ spec:
     - name: main 
       dag:
         tasks:
-          - name: demo
-            template: echo 
+          - name: guesser
+            template: random
+          - name: star
+            template: starwars
+          - name: echo-guesser
+            template: echo
             arguments:
               parameters:
                 - name: message
-                  value: "Hello World"
+                  value: "{{tasks.guesser.outputs.result}}"
+            dependencies: ["guesser", "star"]
     - name: echo
       inputs:
         parameters:
@@ -23,3 +28,40 @@ spec:
         command: ["echo"]
         args:
           - "{{ inputs.parameters.message }}"
+    - name: random
+      inputs:
+        parameters:
+          - name: goal
+            value: 1
+          - name: range
+            value: 2
+      script:
+        image: python:alpine3.6
+        source: |
+          import sys
+          import random
+
+          x = int(sys.argv[1])
+          n = int(sys.argv[2])
+
+          random_value = random.randint(1, n)
+          print(f"Generated random value: {random_value}")
+
+          if random_value == x:
+              print("Success: The random value equals X!")
+          else:
+              print("Failure: The random value does not equal X.")
+        command: [python]
+        args:
+          - "{{ inputs.parameters.goal }}"
+          - "{{ inputs.parameters.range }}"
+
+    - name: starwars
+      http:
+        timeoutSeconds: 20
+        url: "https://swapi.info/api/people"
+        method: "GET"
+        headers:
+          - name: "Content-Type"
+            value: "json"
+        successCondition: "response.body contains \"name\""
