@@ -75,7 +75,7 @@ spec:
             value: "{{ inputs.parameters.range }}"
     - name: starwars
       http:
-        timeoutSeconds: 20
+        timeoutSeconds: 60
         url: "https://swapi.info/api/people"
         method: "GET"
         headers:
