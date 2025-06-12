@@ -39,6 +39,7 @@ spec:
         image: python:alpine3.6
         source: |
           import os
+          import sys
           import random
 
           x = int(os.environ["X"])
