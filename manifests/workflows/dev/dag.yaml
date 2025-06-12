@@ -49,8 +49,10 @@ spec:
 
           if random_value == x:
               print("Success: The random value equals X!")
+              sys.exit(0)
           else:
               print("Failure: The random value does not equal X.")
+              sys.exit(1)
         command: [python]
         env:
           - name: "X"
