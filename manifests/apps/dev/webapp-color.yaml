@@ -14,9 +14,6 @@ spec:
       path: manifests/webapp-color
       targetRevision: HEAD
       kustomize:
-        resources:
-        - ./overlays/dev
-        - ./overlays/prod
         commonAnnotationsEnvsubst: true
         commonAnnotations:
           app-source: ${ARGOCD_APP_NAME}
