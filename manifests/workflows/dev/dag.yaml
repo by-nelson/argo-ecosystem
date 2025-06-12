@@ -12,13 +12,26 @@ spec:
             template: random
           - name: star
             template: starwars
+          - name: guesser-triple
+            template: random
+            arguments:
+              parameters:
+                - name: range
+                  value: 3
           - name: echo-guesser
             template: echo
             arguments:
               parameters:
                 - name: message
                   value: "{{tasks.guesser.outputs.result}}"
-            dependencies: ["guesser", "star"]
+            depends: (guesser.Succeeded || guesser.Failed) && star.Succeeded
+          - name: echo-starwars
+            template: echo
+            arguments:
+              parameters:
+                - name: message
+                  value: "{{tasks.star.outputs.result}}"
+            depends: "star.Succeeded && (guesser.Succeeded && guesser-triple.Failed)"
     - name: echo
       inputs:
         parameters:
