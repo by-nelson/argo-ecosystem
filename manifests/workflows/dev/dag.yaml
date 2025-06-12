@@ -53,9 +53,9 @@ spec:
               print("Failure: The random value does not equal X.")
         command: [python]
         env:
-          - name: X
+          - name: "X"
             value: "{{ inputs.parameters.goal }}"
-          - name: N
+          - name: "N"
             value: "{{ inputs.parameters.range }}"
     - name: starwars
       http:
