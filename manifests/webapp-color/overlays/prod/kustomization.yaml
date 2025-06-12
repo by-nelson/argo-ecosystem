@@ -1,0 +1,12 @@
+resources:
+  - ./../../base
+nameSuffix: "-prd"
+namespace: "webapp-prd"
+images:
+  - name: kodekloud/webapp-color
+    newTag: v1
+replicas:
+  - name: webapp-color
+    count: 4
+commonLabels:
+  app: webapp-prd

@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-color
+spec:
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - image: kodekloud/webapp-color
+          imagePullPolicy: IfNotPresent
+          name: webapp
+          ports: 
+            - containerPort: 8080
+              protocol: TCP

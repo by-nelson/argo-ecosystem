@@ -30,7 +30,7 @@ spec:
             arguments:
               parameters:
                 - name: message
-                  value: "{{=jsonpath toJson(tasks.star.outputs.result) '$.name'}}"
+                  value: "{{= jsonpath(toJson(tasks.star.outputs.result), '$.name')}}"
             depends: "star.Succeeded && (guesser.Succeeded && guesser-triple.Failed)"
     - name: echo
       inputs:

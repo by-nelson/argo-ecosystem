@@ -1,0 +1,12 @@
+resources:
+  - ./../../base
+nameSuffix: "-dev"
+namespace: "webapp-dev"
+images:
+  - name: kodekloud/webapp-color
+    newTag: v2
+replicas:
+  - name: webapp-color
+    count: 2
+commonLabels:
+  app: webapp-dev 

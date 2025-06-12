@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: webapp
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+  sources:
+    - repoURL: https://github.com/by-nelson/argo-ecosystem.git
+      path: manifests/webapp-color
+      targetRevision: HEAD
+      kustomize:
+        resources:
+        - ./overlays/dev
+        - ./overlays/prod
+        commonAnnotationsEnvsubst: true
+        commonAnnotations:
+          app-source: ${ARGOCD_APP_NAME}
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
