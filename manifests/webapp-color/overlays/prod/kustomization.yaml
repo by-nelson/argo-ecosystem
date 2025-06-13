@@ -5,6 +5,6 @@ images:
     newTag: v1
 replicas:
   - name: webapp-color
-    count: 4
+    count: 5
 commonLabels:
   app: webapp-prd
