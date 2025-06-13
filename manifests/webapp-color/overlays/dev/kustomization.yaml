@@ -1,7 +1,5 @@
 resources:
   - ./../../base
-nameSuffix: "-dev"
-namespace: "webapp-dev"
 images:
   - name: kodekloud/webapp-color
     newTag: v2

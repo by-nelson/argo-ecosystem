@@ -1,27 +1,40 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
   name: webapp
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default
-  destination:
-    server: https://kubernetes.default.svc
-  sources:
-    - repoURL: https://github.com/by-nelson/argo-ecosystem.git
-      path: manifests/webapp-color
-      targetRevision: HEAD
-      kustomize:
-        commonAnnotationsEnvsubst: true
-        commonAnnotations:
-          app-source: ${ARGOCD_APP_NAME}
-  syncPolicy:
-    automated:
-      enabled: true
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - ApplyOutOfSyncOnly=true
-      - CreateNamespace=true
+  goTempalte: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/by-nelson/argo-ecosystem.git
+        revision: HEAD
+        directories:
+          - path: manifests/webapp-color/overlays/*
+  template:
+    metadata:
+      name: "webapp-{{ .path.basenameNormalized }}"
+    spec:
+      project: default
+      destination:
+        server: https://kubernetes.default.svc
+      sources:
+        - repoURL: https://github.com/by-nelson/argo-ecosystem.git
+          path: "{{ .path.path }}"
+          targetRevision: HEAD
+          kustomize:
+            nameSuffix: "-{{ .path.basenameNormalized }}"
+            namespace: "webapp-color-{{ .path.basenameNormalized }}"
+            commonAnnotationsEnvsubst: true
+            commonAnnotations:
+              app-source: ${ARGOCD_APP_NAME}
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - ApplyOutOfSyncOnly=true
+          - CreateNamespace=true

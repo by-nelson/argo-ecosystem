@@ -1,7 +1,5 @@
 resources:
   - ./../../base
-nameSuffix: "-prd"
-namespace: "webapp-prd"
 images:
   - name: kodekloud/webapp-color
     newTag: v1

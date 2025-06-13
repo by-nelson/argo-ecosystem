@@ -46,7 +46,6 @@ argocd-apps:
             namespace: "{{.path.basename}}"
           syncPolicy:
             automated:
-              enabled: false
               prune: true
             syncOptions:
               - CreateNamespace=true
