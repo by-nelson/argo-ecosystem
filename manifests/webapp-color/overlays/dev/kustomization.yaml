@@ -2,10 +2,9 @@ resources:
   - ./../../base
 images:
   - name: kodekloud/webapp-color
-    newTag: v2
+    newTag: v1
 commonLabels:
   app: webapp-dev 
-
 
 patches:
   - patch: |-

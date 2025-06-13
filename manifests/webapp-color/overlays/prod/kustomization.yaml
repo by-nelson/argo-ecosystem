@@ -2,7 +2,7 @@ resources:
   - ./../../base
 images:
   - name: kodekloud/webapp-color
-    newTag: v1
+    newTag: v2
 commonLabels:
   app: webapp-prd
 
