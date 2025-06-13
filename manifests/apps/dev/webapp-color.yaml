@@ -21,6 +21,7 @@ spec:
       project: default
       destination:
         server: https://kubernetes.default.svc
+        namespace: "webapp-color-{{ .path.basenameNormalized }}"
       sources:
         - repoURL: https://github.com/by-nelson/argo-ecosystem.git
           path: "{{ .path.path }}"
