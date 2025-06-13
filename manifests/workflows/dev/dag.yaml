@@ -4,6 +4,9 @@ metadata:
   name: dag-demo-template
 spec:
   entrypoint: main
+  artifactRepositoryRef:
+    configMap: minio-artifact-repository
+    key: default-v1-minio-artifact-repository
   templates:
     - name: main 
       dag:
@@ -32,6 +35,13 @@ spec:
                 - name: message
                   value: "{{= jsonpath(toJson(tasks.star.outputs.result), '$.name')}}"
             depends: "star.Succeeded && (guesser.Succeeded && guesser-triple.Failed)"
+          - name: archive-starwars
+            template: archive
+            arguments:
+              parameters:
+                - name: message
+                  value: "{{tasks.start.outputs.result}}"
+            depends: "start.Succeeded"
     - name: echo
       inputs:
         parameters:
@@ -41,6 +51,20 @@ spec:
         command: ["echo"]
         args:
           - "{{ inputs.parameters.message }}"
+    - name: archive
+      inputs:
+        parameters:
+          - name: message
+      container:
+        image: busybox
+        command: [sh, -c]
+        args: ["echo {{ inputs.parameters.message }} | tee /tmp/message.txt"]
+      outputs:
+        artifacts:
+          - name: message-file
+            path: /tmp/message.txt
+            s3:
+              key: dag-message 
     - name: random
       inputs:
         parameters:
