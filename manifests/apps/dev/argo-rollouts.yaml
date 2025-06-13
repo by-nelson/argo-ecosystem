@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argorollouts
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-rollouts
+  sources:
+    - chart: argo-rollouts
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 2.39.6
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
