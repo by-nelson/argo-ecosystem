@@ -58,7 +58,7 @@ spec:
       container:
         image: busybox
         command: [sh, -c]
-        args: ["echo {{ inputs.parameters.message }} | tee /tmp/message.txt"]
+        args: ["echo '{{ inputs.parameters.message }}' | tee /tmp/message.txt"]
       outputs:
         artifacts:
           - name: message-file
