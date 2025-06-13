@@ -6,7 +6,7 @@ metadata:
 type: Opaque
 stringData:
   accesskey: admin
-  secretkey: argo123
+  secretkey: argo1234
 ---
 apiVersion: apps/v1
 kind: Deployment
