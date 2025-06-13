@@ -3,8 +3,14 @@ resources:
 images:
   - name: kodekloud/webapp-color
     newTag: v1
-replicas:
-  - name: webapp-color
-    count: 5
 commonLabels:
   app: webapp-prd
+
+patches:
+  - patch: |-
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      metadata:
+        name: webapp-color
+      spec:
+        replicas: 5
