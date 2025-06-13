@@ -21,6 +21,8 @@ spec:
               parameters:
                 - name: range
                   value: 3
+                - name: safe-to-retry
+                  value: true
           - name: echo-guesser
             template: echo
             arguments:
@@ -72,8 +74,13 @@ spec:
             value: 1
           - name: range
             value: 2
+          - name: safe-to-retry
+            value: false
       script:
         image: python:alpine3.6
+        retryStrategy:
+          limit: "5"
+          expression: "asInt(lastRetry.exitCode) == 1 && {{inputs.parameters.safe-to-retry}} == true"
         source: |
           import os
           import sys
