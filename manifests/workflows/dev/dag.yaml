@@ -40,8 +40,8 @@ spec:
             arguments:
               parameters:
                 - name: message
-                  value: "{{tasks.start.outputs.result}}"
-            depends: "start.Succeeded"
+                  value: "{{tasks.star.outputs.result}}"
+            depends: "star.Succeeded"
     - name: echo
       inputs:
         parameters:
