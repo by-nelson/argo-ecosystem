@@ -58,3 +58,24 @@ spec:
       targetPort: 9000
   selector:
     app: minio
+
+# Artifacts configuration for Argo Workflows
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minio-artifact-repository
+  annotations:
+    workflows.argoproj.io/default-artifact-repository: default-v1-minio-artifact-repository
+data:
+  default-v1-minio-artifact-repository: |
+    s3:
+      bucket: workflows
+      endpoint: minio:9000
+      insecure: true
+      accessKeySecret:
+        name: minio-creds
+        key: accesskey
+      secretKeySecret:
+        name: minio-creds
+        key: secretkey
